@@ -1,0 +1,71 @@
+digraph ERD {
+    rankdir=LR;
+    graph [fontname="Helvetica", bgcolor="white", pad=0.3];
+    node [shape=plaintext, fontname="Helvetica"];
+    edge [fontname="Helvetica", fontsize=10, color="#555555"];
+
+    passengers [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#eef3fb">
+        <TR><TD BGCOLOR="#1f4e79" COLSPAN="2"><FONT COLOR="white"><B>passengers</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">passenger_id INTEGER</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">full_name VARCHAR(120)</TD></TR>
+        <TR><TD ALIGN="LEFT">UQ</TD><TD ALIGN="LEFT">email VARCHAR(255)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">phone VARCHAR(20)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">date_of_birth DATE</TD></TR>
+        <TR><TD ALIGN="LEFT">UQ</TD><TD ALIGN="LEFT">passport_number VARCHAR(20)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">loyalty_tier VARCHAR(20)</TD></TR>
+        </TABLE>
+    >];
+
+    flights [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#eef3fb">
+        <TR><TD BGCOLOR="#1f4e79" COLSPAN="2"><FONT COLOR="white"><B>flights</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">flight_id INTEGER</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">flight_number VARCHAR(10)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">airline_code CHAR(2)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">departure_time TIMESTAMP</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">arrival_time TIMESTAMP</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">aircraft_type VARCHAR(50)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">base_fare DECIMAL(10,2)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">is_active BOOLEAN</TD></TR>
+        </TABLE>
+    >];
+
+    bookings [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#fdf3e7">
+        <TR><TD BGCOLOR="#b25c00" COLSPAN="2"><FONT COLOR="white"><B>bookings</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">booking_id BIGINT</TD></TR>
+        <TR><TD ALIGN="LEFT"><B>FK</B></TD><TD ALIGN="LEFT">passenger_id INTEGER</TD></TR>
+        <TR><TD ALIGN="LEFT"><B>FK</B></TD><TD ALIGN="LEFT">flight_id INTEGER</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">booking_timestamp TIMESTAMP</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">seat_number VARCHAR(5)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">booking_status VARCHAR(20)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">fare_paid DECIMAL(10,2)</TD></TR>
+        </TABLE>
+    >];
+
+    airports [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#eaf3ea">
+        <TR><TD BGCOLOR="#2e7d32" COLSPAN="2"><FONT COLOR="white"><B>airports</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">airport_code CHAR(3)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">airport_name VARCHAR(150)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">city VARCHAR(100)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">country VARCHAR(100)</TD></TR>
+        </TABLE>
+    >];
+
+    flight_routes [label=<
+        <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#f3e9f7">
+        <TR><TD BGCOLOR="#6a1b9a" COLSPAN="2"><FONT COLOR="white"><B>flight_routes</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><B>PK,FK</B></TD><TD ALIGN="LEFT">flight_id INTEGER</TD></TR>
+        <TR><TD ALIGN="LEFT"><B>PK,FK</B></TD><TD ALIGN="LEFT">airport_code CHAR(3)</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">stop_sequence SMALLINT</TD></TR>
+        <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">leg_role VARCHAR(10)</TD></TR>
+        </TABLE>
+    >];
+
+    passengers -> bookings [label="1 to many\n(places)", dir=both, arrowhead=crow, arrowtail=tee];
+    flights -> bookings [label="1 to many\n(receives)", dir=both, arrowhead=crow, arrowtail=tee];
+    flights -> flight_routes [label="1 to many\n(has legs)", dir=both, arrowhead=crow, arrowtail=tee];
+    airports -> flight_routes [label="1 to many\n(appears in)", dir=both, arrowhead=crow, arrowtail=tee];
+}
