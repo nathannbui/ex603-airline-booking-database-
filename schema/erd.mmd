@@ -1,0 +1,50 @@
+erDiagram
+    passengers ||--o{ bookings : places
+    flights ||--o{ bookings : receives
+    flights ||--o{ flight_routes : has_leg
+    airports ||--o{ flight_routes : appears_in
+
+    passengers {
+        int passenger_id PK
+        string full_name
+        string email UK
+        string phone
+        date date_of_birth
+        string passport_number UK
+        string loyalty_tier
+    }
+
+    flights {
+        int flight_id PK
+        string flight_number
+        string airline_code
+        timestamp departure_time
+        timestamp arrival_time
+        string aircraft_type
+        decimal base_fare
+        boolean is_active
+    }
+
+    bookings {
+        bigint booking_id PK
+        int passenger_id FK
+        int flight_id FK
+        timestamp booking_timestamp
+        string seat_number
+        string booking_status
+        decimal fare_paid
+    }
+
+    airports {
+        string airport_code PK
+        string airport_name
+        string city
+        string country
+    }
+
+    flight_routes {
+        int flight_id FK
+        string airport_code FK
+        int stop_sequence
+        string leg_role
+    }
