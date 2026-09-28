@@ -102,3 +102,30 @@ CREATE TABLE bookings (
     CONSTRAINT chk_bookings_fare_paid
         CHECK (fare_paid >= 0)
 );
+
+-- ----------------------------------------------------------------
+-- 5. flight_routes
+-- Created last because it references flights and airports.
+-- ----------------------------------------------------------------
+
+CREATE TABLE flight_routes (
+    flight_id INTEGER NOT NULL,
+    airport_code CHAR(3) NOT NULL,
+    stop_sequence SMALLINT NOT NULL,
+    leg_role VARCHAR(11) NOT NULL,
+
+    CONSTRAINT pk_flight_routes PRIMARY KEY (flight_id, airport_code),
+
+    CONSTRAINT fk_flight_routes_flight
+        FOREIGN KEY (flight_id)
+        REFERENCES flights (flight_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_flight_routes_airport
+        FOREIGN KEY (airport_code)
+        REFERENCES airports (airport_code)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT chk_flight_routes_leg_role
+        CHECK (leg_role IN ('origin', 'stop', 'destination'))
+);
