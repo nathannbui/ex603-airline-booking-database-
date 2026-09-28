@@ -53,3 +53,17 @@ CREATE TABLE flights (
     CONSTRAINT chk_flights_times
         CHECK (arrival_time > departure_time)
 );
+
+-- ----------------------------------------------------------------
+-- 3. airports
+-- Created third because it does not reference any other table.
+-- ----------------------------------------------------------------
+
+CREATE TABLE airports (
+    airport_code VARCHAR(10),
+    airport_name VARCHAR(150) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+
+    CONSTRAINT pk_airports PRIMARY KEY (airport_code)
+);
