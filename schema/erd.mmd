@@ -26,7 +26,7 @@ erDiagram
     }
 
     bookings {
-        bigint booking_id PK
+        int booking_id PK
         int passenger_id FK
         int flight_id FK
         timestamp booking_timestamp
@@ -45,6 +45,6 @@ erDiagram
     flight_routes {
         int flight_id FK
         string airport_code FK
-        int stop_sequence
-        string leg_role
+        smallint stop_sequence
+        varchar(11) leg_role
     }

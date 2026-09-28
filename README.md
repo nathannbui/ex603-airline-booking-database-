@@ -14,11 +14,36 @@ Two things make airline data more interesting than a basic one-flight-one-bookin
 
 The questions this platform ultimately needs to support include: which flights are available between two airports on a given date and under a given price; what is a specific passenger's full booking and travel history; which flights or routes generate the most revenue or the most cancellations;. Unit 1 shows the schema, constraints, and ERD that make those questions answerable...
 
-## Schema (ERD)
+## Schema
 
-Five roles: `passengers` (actor), `flights` (producer), `bookings` (event/fact table), `airports` (catalog), and `flight_routes` (junction). Full attribute-level detail, domains, and primary keys are in [`schema/schema-definition.md`](schema/schema-definition.md); every constraint and its `ON DELETE` justification is in [`schema/constraints.md`](schema/constraints.md).
+The PostgreSQL 14+ implementation is in [`schema/schema.sql`](schema/schema.sql). It contains five tables:
 
-Note: Mermaid's ER notation only allows one key tag per attribute, so `flight_routes.flight_id` and `flight_routes.airport_code` are both shown as `FK` below — together they form the table's composite primary key (see `constraints.md` for the full explanation).
+| Table | Role | What it stores |
+|---|---|---|
+| `passengers` | Actor | Passenger names, contact details, dates of birth, passport numbers, and loyalty tiers. |
+| `flights` | Producer | Flight numbers, airlines, departure and arrival times, aircraft types, base fares, and an active flag. |
+| `airports` | Catalog | Airport codes, names, cities, and countries. |
+| `bookings` | Event/fact | Each passenger's reservation for a flight, including booking time, seat, status, and fare paid. |
+| `flight_routes` | Junction | The airports on each flight's itinerary, with a stop sequence and an origin, stop, or destination role. |
+
+### Design decisions
+
+- **Keys:** Passengers, flights, and bookings use integer identity primary keys. Passenger email and passport number are separately unique. Airports use their three-character airport code as a natural primary key.
+- **Multi-airport itineraries:** `flight_routes` connects flights and airports in a many-to-many relationship. Its composite primary key, `(flight_id, airport_code)`, prevents an airport from appearing twice within the same flight. `stop_sequence` records the itinerary order, though the current schema does not enforce unique or positive sequence numbers.
+- **Fares:** `base_fare` and `fare_paid` are separate `NUMERIC(10,2)` values because the advertised fare can differ from the price a passenger pays. Both must be nonnegative, and decimal storage avoids floating-point rounding errors.
+- **Validation:** Named CHECK constraints require arrival after departure and restrict loyalty tiers, booking statuses, and route roles to their allowed values. Booking statuses are `confirmed`, `cancelled`, and `completed`; route roles are `origin`, `stop`, and `destination`. Required values use `NOT NULL`.
+- **Deletion behavior:** A flight with bookings cannot be deleted, and an airport referenced by a route cannot be deleted. Deleting an otherwise removable flight automatically deletes its route entries. The current SQL also deletes a passenger's bookings when that passenger is deleted; this differs from the Unit 1 retention policy and removes that passenger's booking history. The `is_active` flag allows a flight to be marked inactive while retaining its record.
+- **Repeatable setup:** Tables are created in dependency order: passengers, flights, airports, bookings, then flight routes. The reset block drops them in reverse order so the entire script can run twice without manual cleanup. Running this setup removes existing data in these tables.
+
+[`analysis/unit2.md`](analysis/unit2.md) explains every foreign key and CHECK constraint, the execution verification, and the differences from Unit 1. The earlier design is documented in [`schema/schema-definition.md`](schema/schema-definition.md) and [`schema/constraints.md`](schema/constraints.md); those documents still contain differences from the implemented SQL.
+
+### Entity relationship diagram
+
+![Airline booking database ERD](schema/erd.png)
+
+The PNG is generated from [`schema/erd.dot`](schema/erd.dot). A Mermaid version is maintained in [`schema/erd.mmd`](schema/erd.mmd).
+
+In the diagram below, `flight_routes.flight_id` and `flight_routes.airport_code` are labeled as foreign keys; together they also form the composite primary key.
 
 ```mermaid
 erDiagram
@@ -49,7 +74,7 @@ erDiagram
     }
 
     bookings {
-        bigint booking_id PK
+        int booking_id PK
         int passenger_id FK
         int flight_id FK
         timestamp booking_timestamp
@@ -68,7 +93,7 @@ erDiagram
     flight_routes {
         int flight_id FK
         string airport_code FK
-        int stop_sequence
-        string leg_role
+        smallint stop_sequence
+        varchar(11) leg_role
     }
 ```
