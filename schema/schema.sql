@@ -70,3 +70,35 @@ CREATE TABLE airports (
 
     CONSTRAINT pk_airports PRIMARY KEY (airport_code)
 );
+
+-- ----------------------------------------------------------------
+-- 4. bookings
+-- ----------------------------------------------------------------
+
+CREATE TABLE bookings (
+    booking_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    passenger_id INTEGER NOT NULL,
+    flight_id INTEGER NOT NULL,
+    booking_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    seat_number VARCHAR(5),
+    booking_status VARCHAR(20) NOT NULL,
+    fare_paid NUMERIC(10,2) NOT NULL,
+
+    CONSTRAINT pk_bookings PRIMARY KEY (booking_id),
+
+    CONSTRAINT fk_bookings_passenger
+        FOREIGN KEY (passenger_id)
+        REFERENCES passengers (passenger_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_bookings_flight
+        FOREIGN KEY (flight_id)
+        REFERENCES flights (flight_id)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT chk_bookings_status
+        CHECK (booking_status IN ('confirmed', 'cancelled', 'completed')),
+
+    CONSTRAINT chk_bookings_fare_paid
+        CHECK (fare_paid >= 0)
+);
