@@ -37,21 +37,24 @@ CREATE TABLE passengers (
 
 -- ----------------------------------------------------------------
 -- 2. flights
---  second because it does not reference any other table....
+--  second because it does not reference any other table.
 -- ----------------------------------------------------------------
 
 CREATE TABLE flights (
     flight_id INTEGER GENERATED ALWAYS AS IDENTITY,
     flight_number VARCHAR(10) NOT NULL,
-    airline VARCHAR(100) NOT NULL,
+    airline_code CHAR(2) NOT NULL,
     departure_time TIMESTAMP NOT NULL,
     arrival_time TIMESTAMP NOT NULL,
-    flight_status VARCHAR(20) NOT NULL,
+    aircraft_type VARCHAR(50),
+    base_fare NUMERIC(10,2) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
 
     CONSTRAINT pk_flights PRIMARY KEY (flight_id),
-    CONSTRAINT uq_flights_flight_number UNIQUE (flight_number),
     CONSTRAINT chk_flights_times
-        CHECK (arrival_time > departure_time)
+        CHECK (arrival_time > departure_time),
+    CONSTRAINT chk_flights_base_fare
+        CHECK (base_fare >= 0)
 );
 
 -- ----------------------------------------------------------------
@@ -60,7 +63,7 @@ CREATE TABLE flights (
 -- ----------------------------------------------------------------
 
 CREATE TABLE airports (
-    airport_code VARCHAR(10),
+    airport_code CHAR(3),
     airport_name VARCHAR(150) NOT NULL,
     city VARCHAR(100) NOT NULL,
     country VARCHAR(100) NOT NULL,
