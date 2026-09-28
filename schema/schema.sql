@@ -34,3 +34,22 @@ CREATE TABLE passengers (
     CONSTRAINT chk_passengers_loyalty_tier
         CHECK (loyalty_tier IN ('standard', 'silver', 'gold', 'platinum'))
 );
+
+-- ----------------------------------------------------------------
+-- 2. flights
+--  second because it does not reference any other table....
+-- ----------------------------------------------------------------
+
+CREATE TABLE flights (
+    flight_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    flight_number VARCHAR(10) NOT NULL,
+    airline VARCHAR(100) NOT NULL,
+    departure_time TIMESTAMP NOT NULL,
+    arrival_time TIMESTAMP NOT NULL,
+    flight_status VARCHAR(20) NOT NULL,
+
+    CONSTRAINT pk_flights PRIMARY KEY (flight_id),
+    CONSTRAINT uq_flights_flight_number UNIQUE (flight_number),
+    CONSTRAINT chk_flights_times
+        CHECK (arrival_time > departure_time)
+);
