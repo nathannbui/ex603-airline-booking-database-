@@ -97,3 +97,42 @@ erDiagram
         varchar(11) leg_role
     }
 ```
+
+## Unit 4: From Rows to Insight
+
+Unit 4 continues the **instructor-provided Unit 3 `airline.sql` dataset** in the `ex603_data` database. This is different from the Unit 2 design in `schema/schema.sql`; do not run that reset script over the Unit 3 data. The metric is `fare_paid`, producers are identified by `flight_id`, and failure means a recorded `Passenger no show`. Region means `booking_country`.
+
+### Query catalogue
+
+| Query | SQL file | Business question |
+|---|---|---|
+| 4.1a | [q4_1.sql](queries/unit4/q4_1.sql) | What are the platform fare count, total, average, minimum, maximum, distinct passenger count, and zero-fare count? |
+| 4.1b | [q4_1.sql](queries/unit4/q4_1.sql) | Which producers receive the most bookings, and what average fare does each record? |
+| 4.1c | [q4_1.sql](queries/unit4/q4_1.sql) | Which producers meet the 15-booking threshold, and what are their no-show rates? |
+| 4.1d | [q4_1.sql](queries/unit4/q4_1.sql) | How do volume, fare, and no-show counts vary by booking region and booking status together? |
+| 4.2A | [q4_2.sql](queries/unit4/q4_2.sql) | For each producer, how many total bookings and recorded no-shows occur in the same population? |
+| 4.2B | [q4_2.sql](queries/unit4/q4_2.sql) | What are the regional subtotals and platform grand total, without detail rows? |
+| 4.2C | [q4_2.sql](queries/unit4/q4_2.sql) | What is the pooled no-show baseline among producers with at least 15 bookings? |
+
+With the supplied Unit 3 dataset already loaded, run from the repository root:
+
+```sh
+psql -X -v ON_ERROR_STOP=1 -d ex603_data -f queries/unit4/q4_1.sql
+psql -X -v ON_ERROR_STOP=1 -d ex603_data -f queries/unit4/q4_2.sql
+```
+
+The queries only read data. [Unit 4 analysis](analysis/unit4.md) explains the results, definitions, volume screen, subtotals, pipeline, and reflection. The [leadership finding](analysis/unit4-finding.md) recommends two producer identifiers for investigation.
+
+### Query screenshots
+
+Each full, uncropped capture contains the query and its complete PostgreSQL result in a local read-only browser viewer. The viewer executes the query against `ex603_data` on page load.
+
+| Query | Capture |
+|---|---|
+| 4.1a | [Platform summary](screenshots/Unit4%20-%204.1a.png) |
+| 4.1b | [Producer activity](screenshots/Unit4%20-%204.1b.png) |
+| 4.1c | [HAVING volume screen](screenshots/Unit4%20-%204.1c.png) |
+| 4.1d | [Region and status](screenshots/Unit4%20-%204.1d.png) |
+| 4.2A | [Conditional aggregation](screenshots/Unit4%20-%204.2a.png) |
+| 4.2B | [Regional subtotals and grand total](screenshots/Unit4%20-%204.2b.png) |
+| 4.2C | [CTE baseline](screenshots/Unit4%20-%204.2c.png) |
