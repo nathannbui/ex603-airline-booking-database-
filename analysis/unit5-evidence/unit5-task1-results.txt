@@ -1,0 +1,261 @@
+-- 5.1.1: Who booked each flight, and when?
+SELECT b.booking_id, p.passenger_id, p.passenger_name,
+       f.flight_id, f.flight_number, b.booked_at
+FROM bookings b
+INNER JOIN passengers p ON p.passenger_id = b.passenger_id
+INNER JOIN flights f ON f.flight_id = b.flight_id
+ORDER BY b.booking_id;
+ booking_id | passenger_id | passenger_name | flight_id | flight_number |      booked_at      
+------------+--------------+----------------+-----------+---------------+---------------------
+          1 |           14 | Passenger_14   |         1 | VN201         | 2023-06-06 21:55:00
+          2 |           28 | Passenger_28   |         1 | VN201         | 2023-06-09 08:54:00
+          3 |           20 | Passenger_20   |         1 | VN201         | 2023-08-19 19:03:00
+          4 |            1 | Passenger_01   |         1 | VN201         | 2023-01-01 15:48:00
+          5 |           25 | Passenger_25   |         1 | VN201         | 2023-06-27 21:17:00
+          6 |           25 | Passenger_25   |         1 | VN201         | 2023-02-08 00:47:00
+          7 |            4 | Passenger_04   |         1 | VN201         | 2023-02-23 10:07:00
+          8 |            4 | Passenger_04   |         1 | VN201         | 2023-01-16 21:46:00
+          9 |           15 | Passenger_15   |         1 | VN201         | 2023-03-26 10:22:00
+         10 |           17 | Passenger_17   |         1 | VN201         | 2023-06-22 22:30:00
+         11 |            5 | Passenger_05   |         1 | VN201         | 2023-11-14 09:05:00
+         12 |           19 | Passenger_19   |         2 | VN202         | 2023-01-20 08:07:00
+         13 |           22 | Passenger_22   |         2 | VN202         | 2023-04-12 22:27:00
+         14 |           16 | Passenger_16   |         2 | VN202         | 2023-01-27 17:06:00
+         15 |           27 | Passenger_27   |         2 | VN202         | 2023-11-05 23:52:00
+         16 |           23 | Passenger_23   |         2 | VN202         | 2023-05-01 10:38:00
+         17 |           11 | Passenger_11   |         2 | VN202         | 2023-08-11 08:48:00
+         18 |           28 | Passenger_28   |         2 | VN202         | 2023-05-04 14:33:00
+         19 |           30 | Passenger_30   |         2 | VN202         | 2023-01-20 11:49:00
+         20 |            6 | Passenger_06   |         2 | VN202         | 2023-04-26 01:39:00
+         21 |           29 | Passenger_29   |         2 | VN202         | 2023-03-10 18:52:00
+         22 |           30 | Passenger_30   |         2 | VN202         | 2023-06-17 20:40:00
+         23 |           27 | Passenger_27   |         2 | VN202         | 2023-06-03 03:20:00
+         24 |           29 | Passenger_29   |         2 | VN202         | 2023-07-03 05:00:00
+         25 |            2 | Passenger_02   |         2 | VN202         | 2023-08-05 23:11:00
+         26 |            1 | Passenger_01   |         2 | VN202         | 2023-12-17 07:13:00
+         27 |           15 | Passenger_15   |         2 | VN202         | 2023-07-25 22:44:00
+         28 |           13 | Passenger_13   |         3 | VN203         | 2023-10-04 13:43:00
+         29 |            1 | Passenger_01   |         3 | VN203         | 2023-07-06 19:25:00
+         30 |            1 | Passenger_01   |         3 | VN203         | 2023-12-18 12:49:00
+         31 |           21 | Passenger_21   |         3 | VN203         | 2023-09-04 12:21:00
+         32 |           13 | Passenger_13   |         3 | VN203         | 2023-12-28 02:28:00
+         33 |           24 | Passenger_24   |         3 | VN203         | 2023-07-05 20:00:00
+         34 |           11 | Passenger_11   |         3 | VN203         | 2023-05-12 17:06:00
+         35 |            8 | Passenger_08   |         3 | VN203         | 2023-02-28 17:00:00
+         36 |           22 | Passenger_22   |         3 | VN203         | 2023-07-21 14:43:00
+         37 |            6 | Passenger_06   |         3 | VN203         | 2023-05-12 06:59:00
+         38 |           26 | Passenger_26   |         3 | VN203         | 2023-05-04 14:17:00
+         39 |            7 | Passenger_07   |         3 | VN203         | 2023-06-02 18:07:00
+         40 |            6 | Passenger_06   |         3 | VN203         | 2023-05-03 19:33:00
+         41 |           28 | Passenger_28   |         4 | VN204         | 2023-11-13 00:48:00
+         42 |           12 | Passenger_12   |         4 | VN204         | 2023-08-17 02:06:00
+         43 |           19 | Passenger_19   |         4 | VN204         | 2023-10-15 19:01:00
+         44 |           16 | Passenger_16   |         4 | VN204         | 2023-09-05 08:58:00
+         45 |           11 | Passenger_11   |         4 | VN204         | 2023-05-19 01:12:00
+         46 |            7 | Passenger_07   |         4 | VN204         | 2023-07-27 10:08:00
+         47 |            4 | Passenger_04   |         5 | VN205         | 2023-09-13 04:15:00
+         48 |           16 | Passenger_16   |         5 | VN205         | 2023-01-25 21:19:00
+         49 |           26 | Passenger_26   |         5 | VN205         | 2023-05-05 17:19:00
+         50 |            4 | Passenger_04   |         5 | VN205         | 2023-11-26 01:07:00
+         51 |           29 | Passenger_29   |         5 | VN205         | 2023-05-12 19:00:00
+         52 |           23 | Passenger_23   |         5 | VN205         | 2023-10-11 05:57:00
+         53 |            8 | Passenger_08   |         5 | VN205         | 2023-02-01 17:02:00
+         54 |           13 | Passenger_13   |         5 | VN205         | 2023-10-11 06:21:00
+         55 |            8 | Passenger_08   |         5 | VN205         | 2023-01-28 12:37:00
+         56 |           23 | Passenger_23   |         5 | VN205         | 2023-01-08 08:12:00
+         57 |            8 | Passenger_08   |         5 | VN205         | 2023-11-01 23:28:00
+         58 |           26 | Passenger_26   |         5 | VN205         | 2023-08-14 17:10:00
+         59 |           16 | Passenger_16   |         5 | VN205         | 2023-07-18 16:34:00
+         60 |            9 | Passenger_09   |         5 | VN205         | 2023-12-20 19:28:00
+         61 |           17 | Passenger_17   |         5 | VN205         | 2023-10-10 11:17:00
+         62 |           28 | Passenger_28   |         5 | VN205         | 2023-07-14 04:15:00
+         63 |           25 | Passenger_25   |         5 | VN205         | 2023-11-07 14:54:00
+         64 |            6 | Passenger_06   |         5 | VN205         | 2023-06-02 17:01:00
+         65 |           27 | Passenger_27   |         6 | VN206         | 2023-06-13 02:50:00
+         66 |            2 | Passenger_02   |         6 | VN206         | 2023-09-24 16:43:00
+         67 |           13 | Passenger_13   |         6 | VN206         | 2023-09-19 07:49:00
+         68 |           21 | Passenger_21   |         6 | VN206         | 2023-09-12 18:32:00
+         69 |            5 | Passenger_05   |         6 | VN206         | 2023-12-13 14:24:00
+         70 |           26 | Passenger_26   |         6 | VN206         | 2023-10-11 05:28:00
+         71 |           16 | Passenger_16   |         6 | VN206         | 2023-12-05 08:29:00
+         72 |           27 | Passenger_27   |         6 | VN206         | 2023-04-27 19:18:00
+         73 |            1 | Passenger_01   |         6 | VN206         | 2023-08-23 18:44:00
+         74 |           10 | Passenger_10   |         6 | VN206         | 2023-08-08 00:58:00
+         75 |           24 | Passenger_24   |         6 | VN206         | 2023-01-28 20:59:00
+         76 |            2 | Passenger_02   |         6 | VN206         | 2023-10-06 05:08:00
+         77 |            1 | Passenger_01   |         6 | VN206         | 2023-03-18 23:27:00
+         78 |           29 | Passenger_29   |         6 | VN206         | 2023-10-26 23:02:00
+         79 |           23 | Passenger_23   |         6 | VN206         | 2023-07-08 15:16:00
+         80 |           19 | Passenger_19   |         6 | VN206         | 2023-05-25 17:23:00
+         81 |           16 | Passenger_16   |         6 | VN206         | 2023-03-15 08:20:00
+         82 |           23 | Passenger_23   |         6 | VN206         | 2023-01-13 17:20:00
+         83 |           26 | Passenger_26   |         6 | VN206         | 2023-02-21 13:47:00
+         84 |           11 | Passenger_11   |         6 | VN206         | 2023-12-16 22:57:00
+         85 |           26 | Passenger_26   |         6 | VN206         | 2023-10-21 20:43:00
+         86 |            9 | Passenger_09   |         7 | VN207         | 2023-09-22 10:37:00
+         87 |           18 | Passenger_18   |         7 | VN207         | 2023-02-15 08:51:00
+         88 |            8 | Passenger_08   |         7 | VN207         | 2023-11-18 05:29:00
+         89 |            6 | Passenger_06   |         7 | VN207         | 2023-04-19 13:00:00
+         90 |           22 | Passenger_22   |         7 | VN207         | 2023-03-28 13:15:00
+         91 |           24 | Passenger_24   |         7 | VN207         | 2023-03-22 10:50:00
+         92 |           28 | Passenger_28   |         7 | VN207         | 2023-07-24 11:44:00
+         93 |           19 | Passenger_19   |         7 | VN207         | 2023-01-27 23:39:00
+         94 |           16 | Passenger_16   |         7 | VN207         | 2023-09-23 03:58:00
+         95 |           18 | Passenger_18   |         7 | VN207         | 2023-12-23 21:37:00
+         96 |           10 | Passenger_10   |         7 | VN207         | 2023-05-25 02:57:00
+         97 |            4 | Passenger_04   |         7 | VN207         | 2023-07-19 18:53:00
+         98 |            8 | Passenger_08   |         7 | VN207         | 2023-10-07 01:40:00
+         99 |           10 | Passenger_10   |         7 | VN207         | 2023-06-24 23:24:00
+        100 |            7 | Passenger_07   |         7 | VN207         | 2023-09-16 10:22:00
+        101 |           24 | Passenger_24   |         7 | VN207         | 2023-07-01 02:22:00
+        102 |           16 | Passenger_16   |         7 | VN207         | 2023-02-27 05:30:00
+        103 |           17 | Passenger_17   |         7 | VN207         | 2023-12-14 01:06:00
+        104 |           20 | Passenger_20   |         8 | VN208         | 2023-04-14 23:09:00
+        105 |           25 | Passenger_25   |         8 | VN208         | 2023-02-27 17:37:00
+        106 |           19 | Passenger_19   |         8 | VN208         | 2023-11-22 04:25:00
+        107 |           30 | Passenger_30   |         8 | VN208         | 2023-12-14 02:28:00
+        108 |           13 | Passenger_13   |         8 | VN208         | 2023-04-26 12:10:00
+        109 |           26 | Passenger_26   |         8 | VN208         | 2023-03-24 04:56:00
+        110 |            9 | Passenger_09   |         8 | VN208         | 2023-08-26 13:23:00
+        111 |           18 | Passenger_18   |         8 | VN208         | 2023-10-18 11:04:00
+        112 |            4 | Passenger_04   |         8 | VN208         | 2023-02-07 02:57:00
+        113 |            1 | Passenger_01   |         8 | VN208         | 2023-02-08 15:57:00
+        114 |           13 | Passenger_13   |         8 | VN208         | 2023-04-15 07:52:00
+        115 |           13 | Passenger_13   |         8 | VN208         | 2023-12-08 03:38:00
+        116 |           27 | Passenger_27   |         8 | VN208         | 2023-02-23 15:15:00
+        117 |            8 | Passenger_08   |         8 | VN208         | 2023-02-17 02:52:00
+        118 |           10 | Passenger_10   |         8 | VN208         | 2023-06-03 04:27:00
+        119 |           12 | Passenger_12   |         8 | VN208         | 2023-09-09 16:48:00
+        120 |           17 | Passenger_17   |         8 | VN208         | 2023-06-27 05:16:00
+        121 |           11 | Passenger_11   |         8 | VN208         | 2023-08-21 16:49:00
+        122 |            6 | Passenger_06   |         8 | VN208         | 2023-09-20 18:29:00
+        123 |           11 | Passenger_11   |         8 | VN208         | 2023-11-05 07:08:00
+        124 |            1 | Passenger_01   |         9 | VN209         | 2023-09-19 05:02:00
+        125 |            4 | Passenger_04   |         9 | VN209         | 2023-05-28 00:50:00
+        126 |           28 | Passenger_28   |         9 | VN209         | 2023-12-17 20:03:00
+        127 |           18 | Passenger_18   |         9 | VN209         | 2023-06-15 15:49:00
+        128 |           13 | Passenger_13   |         9 | VN209         | 2023-08-13 17:08:00
+        129 |           23 | Passenger_23   |         9 | VN209         | 2023-12-16 08:08:00
+        130 |            1 | Passenger_01   |         9 | VN209         | 2023-05-22 15:28:00
+        131 |            4 | Passenger_04   |         9 | VN209         | 2023-04-28 04:16:00
+        132 |            3 | Passenger_03   |         9 | VN209         | 2023-06-21 13:31:00
+        133 |           21 | Passenger_21   |         9 | VN209         | 2023-07-24 06:17:00
+        134 |           22 | Passenger_22   |         9 | VN209         | 2023-11-11 07:19:00
+        135 |           15 | Passenger_15   |         9 | VN209         | 2023-05-05 21:45:00
+        136 |           18 | Passenger_18   |         9 | VN209         | 2023-08-03 03:33:00
+        137 |           20 | Passenger_20   |         9 | VN209         | 2023-01-05 14:18:00
+        138 |           15 | Passenger_15   |        10 | VN210         | 2023-09-25 08:06:00
+        139 |            1 | Passenger_01   |        10 | VN210         | 2023-11-26 06:51:00
+        140 |            5 | Passenger_05   |        10 | VN210         | 2023-03-20 07:18:00
+        141 |           20 | Passenger_20   |        10 | VN210         | 2023-05-11 19:25:00
+        142 |            4 | Passenger_04   |        10 | VN210         | 2023-02-26 21:34:00
+        143 |           21 | Passenger_21   |        10 | VN210         | 2023-10-08 17:15:00
+        144 |            1 | Passenger_01   |        10 | VN210         | 2023-01-14 10:57:00
+        145 |            2 | Passenger_02   |        10 | VN210         | 2023-01-23 11:44:00
+        146 |            7 | Passenger_07   |        10 | VN210         | 2023-01-24 17:09:00
+        147 |            8 | Passenger_08   |        10 | VN210         | 2023-11-13 05:33:00
+        148 |            1 | Passenger_01   |        10 | VN210         | 2023-02-03 07:01:00
+        149 |           20 | Passenger_20   |        10 | VN210         | 2023-08-14 18:22:00
+        150 |           15 | Passenger_15   |        10 | VN210         | 2023-04-24 16:31:00
+        151 |           18 | Passenger_18   |        10 | VN210         | 2023-02-02 00:59:00
+        152 |           21 | Passenger_21   |        10 | VN210         | 2023-05-22 13:45:00
+        153 |           20 | Passenger_20   |        10 | VN210         | 2023-07-14 22:03:00
+        154 |            1 | Passenger_01   |        10 | VN210         | 2023-01-23 22:51:00
+        155 |           22 | Passenger_22   |        10 | VN210         | 2023-07-06 03:43:00
+        156 |           19 | Passenger_19   |        10 | VN210         | 2023-10-04 02:22:00
+        157 |            5 | Passenger_05   |        11 | VN211         | 2023-11-11 10:44:00
+        158 |           13 | Passenger_13   |        11 | VN211         | 2023-10-14 22:46:00
+        159 |           26 | Passenger_26   |        11 | VN211         | 2023-08-23 11:46:00
+        160 |           21 | Passenger_21   |        11 | VN211         | 2023-07-10 14:23:00
+        161 |           17 | Passenger_17   |        11 | VN211         | 2023-08-17 21:49:00
+        162 |           28 | Passenger_28   |        11 | VN211         | 2023-06-04 17:48:00
+        163 |           21 | Passenger_21   |        11 | VN211         | 2023-03-07 06:37:00
+        164 |           24 | Passenger_24   |        11 | VN211         | 2023-02-09 14:56:00
+        165 |           16 | Passenger_16   |        11 | VN211         | 2023-03-04 15:06:00
+        166 |           20 | Passenger_20   |        11 | VN211         | 2023-10-17 23:57:00
+        167 |           27 | Passenger_27   |        11 | VN211         | 2023-02-15 15:42:00
+        168 |           30 | Passenger_30   |        11 | VN211         | 2023-06-10 23:54:00
+        169 |           24 | Passenger_24   |        11 | VN211         | 2023-01-08 14:28:00
+        170 |           19 | Passenger_19   |        11 | VN211         | 2023-02-24 00:13:00
+        171 |           23 | Passenger_23   |        11 | VN211         | 2023-10-01 08:57:00
+        172 |           28 | Passenger_28   |        11 | VN211         | 2023-02-24 22:40:00
+        173 |           21 | Passenger_21   |        12 | VN212         | 2023-06-17 14:10:00
+        174 |           13 | Passenger_13   |        12 | VN212         | 2023-10-03 09:33:00
+        175 |            8 | Passenger_08   |        12 | VN212         | 2023-06-26 02:57:00
+        176 |           23 | Passenger_23   |        12 | VN212         | 2023-11-15 18:45:00
+        177 |           16 | Passenger_16   |        12 | VN212         | 2023-03-02 20:20:00
+        178 |           16 | Passenger_16   |        12 | VN212         | 2023-12-12 06:04:00
+        179 |           20 | Passenger_20   |        12 | VN212         | 2023-07-12 16:01:00
+        180 |           26 | Passenger_26   |        12 | VN212         | 2023-08-08 11:28:00
+        181 |           15 | Passenger_15   |        12 | VN212         | 2023-08-18 13:29:00
+        182 |           13 | Passenger_13   |        12 | VN212         | 2023-12-25 17:21:00
+        183 |           14 | Passenger_14   |        12 | VN212         | 2023-01-10 21:57:00
+        184 |            5 | Passenger_05   |        12 | VN212         | 2023-09-13 04:49:00
+        185 |           25 | Passenger_25   |        12 | VN212         | 2023-02-16 21:47:00
+        186 |           23 | Passenger_23   |        12 | VN212         | 2023-06-28 07:09:00
+        187 |           18 | Passenger_18   |        12 | VN212         | 2023-09-20 12:04:00
+        188 |           23 | Passenger_23   |        12 | VN212         | 2023-01-07 08:04:00
+        189 |           29 | Passenger_29   |        12 | VN212         | 2023-08-12 07:48:00
+        190 |            2 | Passenger_02   |        13 | VN213         | 2023-01-08 02:11:00
+        191 |           27 | Passenger_27   |        13 | VN213         | 2023-05-21 20:54:00
+        192 |           12 | Passenger_12   |        13 | VN213         | 2023-01-10 10:35:00
+        193 |           19 | Passenger_19   |        13 | VN213         | 2023-04-02 18:09:00
+        194 |           10 | Passenger_10   |        13 | VN213         | 2023-10-06 03:25:00
+        195 |           17 | Passenger_17   |        13 | VN213         | 2023-08-16 14:56:00
+        196 |           26 | Passenger_26   |        13 | VN213         | 2023-12-26 16:58:00
+        197 |           23 | Passenger_23   |        13 | VN213         | 2023-04-21 18:17:00
+        198 |           22 | Passenger_22   |        13 | VN213         | 2023-02-20 10:20:00
+        199 |            5 | Passenger_05   |        13 | VN213         | 2023-06-23 04:32:00
+        200 |           20 | Passenger_20   |        13 | VN213         | 2023-09-04 19:15:00
+(200 rows)
+
+-- 5.1.2: Which flights have the SGN catalog tag, including investigation targets?
+-- Airports are the catalog; SGN is the selected airline theme tag.
+SELECT f.flight_id, f.flight_number, a.iata_code, a.airport_name,
+       f.flight_id IN (2, 3) AS unit4_investigation_target
+FROM flights f
+JOIN flight_routes r ON r.flight_id = f.flight_id
+JOIN airports a ON a.airport_id = r.airport_id
+WHERE a.iata_code = 'SGN'
+ORDER BY f.flight_id;
+ flight_id | flight_number | iata_code |        airport_name        | unit4_investigation_target 
+-----------+---------------+-----------+----------------------------+----------------------------
+         1 | VN201         | SGN       | Tan Son Nhat International | f
+         2 | VN202         | SGN       | Tan Son Nhat International | t
+         4 | VN204         | SGN       | Tan Son Nhat International | f
+         5 | VN205         | SGN       | Tan Son Nhat International | f
+         7 | VN207         | SGN       | Tan Son Nhat International | f
+         8 | VN208         | SGN       | Tan Son Nhat International | f
+         9 | VN209         | SGN       | Tan Son Nhat International | f
+        10 | VN210         | SGN       | Tan Son Nhat International | f
+        12 | VN212         | SGN       | Tan Son Nhat International | f
+(9 rows)
+
+-- 5.1.3: How do targets 2 and 3 compare to other flights from the same country?
+WITH activity AS (
+ SELECT flight_id, COUNT(*) AS bookings,
+        COUNT(*) FILTER (WHERE cancellation_reason = 'Passenger no show') AS no_shows
+ FROM bookings GROUP BY flight_id
+)
+SELECT f.flight_id AS target_id, f.flight_number AS target_number,
+       peer.flight_id AS peer_id, peer.flight_number AS peer_number,
+       f.origin_country, f.is_active AS target_active, peer.is_active AS peer_active,
+       f.seat_capacity AS target_capacity, peer.seat_capacity AS peer_capacity,
+       COALESCE(a.bookings,0) AS target_bookings, COALESCE(b.bookings,0) AS peer_bookings,
+       ROUND(100.0*a.no_shows/NULLIF(a.bookings,0),2) AS target_no_show_pct,
+       ROUND(100.0*b.no_shows/NULLIF(b.bookings,0),2) AS peer_no_show_pct
+FROM flights f
+JOIN flights peer ON peer.origin_country = f.origin_country AND peer.flight_id <> f.flight_id
+LEFT JOIN activity a ON a.flight_id=f.flight_id
+LEFT JOIN activity b ON b.flight_id=peer.flight_id
+WHERE f.flight_id IN (2,3)
+ORDER BY f.flight_id, peer.flight_id;
+ target_id | target_number | peer_id | peer_number | origin_country | target_active | peer_active | target_capacity | peer_capacity | target_bookings | peer_bookings | target_no_show_pct | peer_no_show_pct 
+-----------+---------------+---------+-------------+----------------+---------------+-------------+-----------------+---------------+-----------------+---------------+--------------------+------------------
+         2 | VN202         |       6 | VN206       | Japan          | t             | t           |             320 |            90 |              16 |            21 |              18.75 |             4.76
+         2 | VN202         |      11 | VN211       | Japan          | t             | t           |             320 |           193 |              16 |            16 |              18.75 |             6.25
+         3 | VN203         |       5 | VN205       | Korea          | f             | t           |             320 |           320 |              13 |            18 |              15.38 |             0.00
+         3 | VN203         |      12 | VN212       | Korea          | f             | t           |             320 |           115 |              13 |            17 |              15.38 |             5.88
+         3 | VN203         |      13 | VN213       | Korea          | f             | t           |             320 |           166 |              13 |            11 |              15.38 |             0.00
+(5 rows)
+

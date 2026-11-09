@@ -1,0 +1,87 @@
+-- 5.3A.1: What candidate airport pairs can be generated from two small tables?
+-- Both source relations contain five rows; includes same-airport pairs intentionally.
+WITH origins AS (SELECT airport_id,iata_code FROM airports),
+ destinations AS (SELECT airport_id,iata_code FROM airports)
+SELECT o.iata_code AS origin,d.iata_code AS destination
+FROM origins o CROSS JOIN destinations d ORDER BY o.airport_id,d.airport_id;
+ origin | destination 
+--------+-------------
+ SGN    | SGN
+ SGN    | HAN
+ SGN    | SIN
+ SGN    | NRT
+ SGN    | ICN
+ HAN    | SGN
+ HAN    | HAN
+ HAN    | SIN
+ HAN    | NRT
+ HAN    | ICN
+ SIN    | SGN
+ SIN    | HAN
+ SIN    | SIN
+ SIN    | NRT
+ SIN    | ICN
+ NRT    | SGN
+ NRT    | HAN
+ NRT    | SIN
+ NRT    | NRT
+ NRT    | ICN
+ ICN    | SGN
+ ICN    | HAN
+ ICN    | SIN
+ ICN    | NRT
+ ICN    | ICN
+(25 rows)
+
+-- 5.3A.2: Does the actual Cartesian count equal the product of source counts?
+WITH origins AS (SELECT airport_id FROM airports),
+ destinations AS (SELECT airport_id FROM airports)
+SELECT (SELECT COUNT(*) FROM origins) AS origin_count,
+ (SELECT COUNT(*) FROM destinations) AS destination_count,
+ (SELECT COUNT(*) FROM origins)*(SELECT COUNT(*) FROM destinations) AS expected_pairs,
+ (SELECT COUNT(*) FROM origins CROSS JOIN destinations) AS actual_pairs;
+ origin_count | destination_count | expected_pairs | actual_pairs 
+--------------+-------------------+----------------+--------------
+            5 |                 5 |             25 |           25
+(1 row)
+
+-- 5.3B: How does PostgreSQL execute the exact three-table event report from 5.1.1?
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT b.booking_id, p.passenger_id, p.passenger_name,
+       f.flight_id, f.flight_number, b.booked_at
+FROM bookings b
+INNER JOIN passengers p ON p.passenger_id = b.passenger_id
+INNER JOIN flights f ON f.flight_id = b.flight_id
+ORDER BY b.booking_id;
+                                                                 QUERY PLAN                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=35.98..36.48 rows=200 width=540) (actual time=0.328..0.370 rows=200 loops=1)
+   Sort Key: b.booking_id
+   Sort Method: quicksort  Memory: 40kB
+   Buffers: shared hit=33
+   ->  Nested Loop  (cost=12.40..28.34 rows=200 width=540) (actual time=0.069..0.273 rows=200 loops=1)
+         Buffers: shared hit=30
+         ->  Hash Join  (cost=12.25..17.80 rows=200 width=282) (actual time=0.049..0.138 rows=200 loops=1)
+               Hash Cond: (b.passenger_id = p.passenger_id)
+               Buffers: shared hit=4
+               ->  Seq Scan on bookings b  (cost=0.00..5.00 rows=200 width=24) (actual time=0.018..0.044 rows=200 loops=1)
+                     Buffers: shared hit=3
+               ->  Hash  (cost=11.00..11.00 rows=100 width=262) (actual time=0.023..0.024 rows=30 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                     Buffers: shared hit=1
+                     ->  Seq Scan on passengers p  (cost=0.00..11.00 rows=100 width=262) (actual time=0.006..0.011 rows=30 loops=1)
+                           Buffers: shared hit=1
+         ->  Memoize  (cost=0.15..0.41 rows=1 width=262) (actual time=0.000..0.000 rows=1 loops=200)
+               Cache Key: b.flight_id
+               Cache Mode: logical
+               Hits: 187  Misses: 13  Evictions: 0  Overflows: 0  Memory Usage: 2kB
+               Buffers: shared hit=26
+               ->  Index Scan using flights_pkey on flights f  (cost=0.14..0.40 rows=1 width=262) (actual time=0.002..0.002 rows=1 loops=13)
+                     Index Cond: (flight_id = b.flight_id)
+                     Buffers: shared hit=26
+ Planning:
+   Buffers: shared hit=148
+ Planning Time: 3.311 ms
+ Execution Time: 0.436 ms
+(28 rows)
+
